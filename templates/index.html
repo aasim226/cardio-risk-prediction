@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CardioGuard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    height:100%;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* BACKGROUND */
+body{
+    background:
+    linear-gradient(rgba(10,20,40,0.75),rgba(10,20,40,0.75)),
+    url("{{ url_for('static', filename='cardiacimg.png') }}")
+    no-repeat center center fixed;
+    background-size:cover;
+}
+
+/* MAIN LAYOUT */
+.main-container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* LEFT SIDE */
+.left-side{
+    width:50%;
+    position:relative;
+    padding-left:80px;     /* 👈 equal spacing control */
+    padding-right:80px;    /* 👈 keeps balance visually */
+}
+
+/* HEADING */
+.left-side h1{
+    position:absolute;
+    top:60px;              /* adjust slightly if needed */
+    left:80px;             /* 👈 equal left spacing */
+    font-size:72px;
+    font-weight:700;
+    letter-spacing:6px;
+    color:white;
+    text-transform:uppercase;
+    text-shadow:0 6px 25px rgba(0,0,0,0.8);
+}
+
+/* RIGHT FORM */
+.form-card{
+    width:50%;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(22px);
+    padding:0 45px 45px 45px;
+    box-shadow:-15px 0 50px rgba(0,0,0,0.7);
+    color:white;
+    overflow-y:auto;
+}
+
+/* SECTION TITLE */
+.section-title{
+    font-size:16px;
+    font-weight:600;
+    padding-top:20px;
+    padding-bottom:6px;
+    margin-bottom:12px;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+}
+
+/* FORM */
+.form-row{
+    display:flex;
+    gap:15px;
+    margin-bottom:15px;
+}
+
+.form-group{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group.full-width{
+    flex:100%;
+}
+
+label{
+    font-size:13px;
+    margin-bottom:6px;
+    opacity:0.85;
+}
+
+input,select{
+    padding:11px;
+    border-radius:6px;
+    border:none;
+    font-size:14px;
+}
+
+/* BUTTON */
+button{
+    margin-top:25px;
+    width:100%;
+    padding:15px;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
+    background:linear-gradient(135deg,#007bff,#00c6ff);
+    color:white;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+/* RESULT */
+.result{
+    margin-top:20px;
+    padding:15px;
+    border-radius:8px;
+    font-weight:bold;
+    text-align:center;
+    font-size:18px;
+}
+
+.green{ background:rgba(40,167,69,0.95); }
+.orange{ background:rgba(253,126,20,0.95); }
+.red{ background:rgba(220,53,69,0.95); }
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+    .main-container{flex-direction:column;}
+    .left-side{height:200px;}
+    .form-card{width:100%;}
+    .form-row{flex-direction:column;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <div class="left-side">
+        <h1>CARDIOGUARD</h1>
+    </div>
+
+    <div class="form-card">
+
+        <form action="/predict" method="post">
+
+            <div class="section-title">Clinical Parameters</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label>BMI</label>
+                    <input type="number" name="bmi" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Systolic BP</label>
+                    <input type="number" name="systolic_bp" required>
+                </div>
+                <div class="form-group">
+                    <label>Diastolic BP</label>
+                    <input type="number" name="diastolic_bp" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Cholesterol (mg/dL)</label>
+                    <input type="number" name="cholesterol_mg_dl" required>
+                </div>
+                <div class="form-group">
+                    <label>Resting Heart Rate</label>
+                    <input type="number" name="resting_heart_rate" required>
+                </div>
+            </div>
+
+            <div class="section-title">Lifestyle Factors</div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Daily Steps</label>
+                    <input type="number" name="daily_steps" required>
+                </div>
+                <div class="form-group">
+                    <label>Stress Level</label>
+                    <input type="number" name="stress_level" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Physical Activity (hrs/week)</label>
+                    <input type="number" name="physical_activity_hours_per_week" required>
+                </div>
+                <div class="form-group">
+                    <label>Sleep Hours</label>
+                    <input type="number" name="sleep_hours" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Diet Quality Score</label>
+                    <input type="number" name="diet_quality_score" required>
+                </div>
+                <div class="form-group">
+                    <label>Alcohol Units / Week</label>
+                    <input type="number" name="alcohol_units_per_week" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Smoking Status</label>
+                    <select name="smoking_status">
+                        <option value="Never">Never</option>
+                        <option value="Former">Former</option>
+                        <option value="Current">Current</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Family History of Heart Disease</label>
+                    <select name="family_history_heart_disease">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit">Predict Cardiovascular Risk</button>
+
+        </form>
+
+        {% if prediction_text %}
+        <div class="result {{ risk_color }}">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
